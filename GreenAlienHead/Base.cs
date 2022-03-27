@@ -15,7 +15,7 @@ namespace GreenAlienHead
 {
     [BepInDependency(R2API.R2API.PluginGUID)]
     [R2APISubmoduleDependency(nameof(LanguageAPI))]
-    [BepInPlugin("com.Borbo.GreenAlienHead", "Yeah Thats Right Alien Head Is A Green Item Now", "2.0.6")]
+    [BepInPlugin("com.Borbo.GreenAlienHead", "Yeah Thats Right Alien Head Is A Green Item Now", "3.0")]
     public class Base : BaseUnityPlugin
     {
         public static AssetBundle iconBundle = LoadAssetBundle(Properties.Resources.gah);
@@ -58,13 +58,18 @@ namespace GreenAlienHead
             alienHeadNewCooldownFraction = 1 - (CooldownReduction.Value / 100);
 
             IL.RoR2.CharacterBody.RecalculateStats += NerfAlienHeadCdr;
-            RoR2Content.Items.AlienHead.tier = headNewTier;
-            RoR2Content.Items.AlienHead.pickupIconSprite = iconBundle.LoadAsset<Sprite>("Assets/greenalienhead.png");
+            RoR2Application.onLoad += GAH;
 
             LanguageAPI.Add("ITEM_ALIENHEAD_DESC",
                 $"<style=cIsUtility>Reduce skill cooldowns</style> by <style=cIsUtility>{CooldownReduction.Value}%</style> <style=cStack>(+{CooldownReduction.Value}% per stack)</style>.");
 
             Debug.Log($"Green Alien Head Initialized! Cooldowns should now be multiplied by {alienHeadNewCooldownFraction} per stack.");
+        }
+
+        void GAH()
+        {
+            RoR2Content.Items.AlienHead.tier = headNewTier;
+            RoR2Content.Items.AlienHead.pickupIconSprite = iconBundle.LoadAsset<Sprite>("Assets/greenalienhead.png");
         }
 
         private void NerfAlienHeadCdr(ILContext il)
