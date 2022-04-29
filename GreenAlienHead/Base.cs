@@ -15,7 +15,7 @@ namespace GreenAlienHead
 {
     [BepInDependency(R2API.R2API.PluginGUID)]
     [R2APISubmoduleDependency(nameof(LanguageAPI))]
-    [BepInPlugin("com.Borbo.GreenAlienHead", "Yeah Thats Right Alien Head Is A Green Item Now", "3.0.0")]
+    [BepInPlugin("com.Borbo.GreenAlienHead", "Yeah Thats Right Alien Head Is A Green Item Now", "4.0.0")]
     public class Base : BaseUnityPlugin
     {
         public static AssetBundle iconBundle = LoadAssetBundle(Properties.Resources.gah);
@@ -95,7 +95,7 @@ namespace GreenAlienHead
 
         void GAH()
         {
-            RoR2Content.Items.AlienHead.tier = headNewTier;
+            RoR2Content.Items.AlienHead._itemTierDef = ItemTierCatalog.GetItemTierDef(headNewTier);
             if (headNewTier == ItemTier.Tier2)
                 RoR2Content.Items.AlienHead.pickupIconSprite = greenAlienHeadSprite;
         }
