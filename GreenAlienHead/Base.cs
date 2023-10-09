@@ -13,9 +13,9 @@ using R2API.Utils;
 
 namespace GreenAlienHead
 {
-    [BepInDependency(R2API.R2API.PluginGUID)]
+    [BepInDependency(R2API.LanguageAPI.PluginGUID)]
     [R2APISubmoduleDependency(nameof(LanguageAPI))]
-    [BepInPlugin("com.Borbo.GreenAlienHead", "Yeah Thats Right Alien Head Is A Green Item Now", "3.0.0")]
+    [BepInPlugin("com.Borbo.GreenAlienHead", "Yeah Thats Right Alien Head Is A Green Item Now", "4.0.1")]
     public class Base : BaseUnityPlugin
     {
         public static AssetBundle iconBundle = LoadAssetBundle(Properties.Resources.gah);
@@ -25,7 +25,6 @@ namespace GreenAlienHead
             return AssetBundle.LoadFromMemory(resourceBytes);
         }
 
-        static ItemDef alienHeadItemDef;
         static Sprite greenAlienHeadSprite;
         internal static ConfigFile CustomConfigFile { get; set; }
         public static ConfigEntry<float> CooldownReduction { get; set; }
@@ -63,41 +62,19 @@ namespace GreenAlienHead
 
             IL.RoR2.CharacterBody.RecalculateStats += NerfAlienHeadCdr;
 
-            alienHeadItemDef = LegacyResourcesAPI.Load<ItemDef>("RoR2/Base/AlienHead/AlienHead.asset");
-            /*if (alienHeadItemDef != null)
+            ItemDef alienhead = LegacyResourcesAPI.Load<ItemDef>("ItemDefs/" + nameof(RoR2Content.Items.AlienHead));
+            if (alienhead)
             {
-                Debug.Log("dasgsethnbsrt");
-                alienHeadItemDef.tier = headNewTier;
-
-                if(headNewTier == ItemTier.Tier2)
-                    alienHeadItemDef.pickupIconSprite = greenAlienHeadSprite;
+                alienhead.tier = headNewTier;
+                alienhead.deprecatedTier = headNewTier;
+                if (headNewTier == ItemTier.Tier2)
+                    RoR2Content.Items.AlienHead.pickupIconSprite = greenAlienHeadSprite;
             }
-            else
-            {
-                Debug.Log("Whadda haell....");
-                //RoR2Application.onLoad += GAH;
-            }*/
-
-            On.RoR2.ItemCatalog.SetItemDefs += Gah2;
-            
 
             LanguageAPI.Add("ITEM_ALIENHEAD_DESC",
                 $"<style=cIsUtility>Reduce skill cooldowns</style> by <style=cIsUtility>{CooldownReduction.Value}%</style> <style=cStack>(+{CooldownReduction.Value}% per stack)</style>.");
 
             Debug.Log($"Green Alien Head Initialized! Cooldowns should now be multiplied by {alienHeadNewCooldownFraction} per stack.");
-        }
-
-        private void Gah2(On.RoR2.ItemCatalog.orig_SetItemDefs orig, ItemDef[] newItemDefs)
-        {
-            GAH();
-            orig(newItemDefs);
-        }
-
-        void GAH()
-        {
-            RoR2Content.Items.AlienHead.tier = headNewTier;
-            if (headNewTier == ItemTier.Tier2)
-                RoR2Content.Items.AlienHead.pickupIconSprite = greenAlienHeadSprite;
         }
 
         private void NerfAlienHeadCdr(ILContext il)
