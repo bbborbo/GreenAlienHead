@@ -65,10 +65,9 @@ namespace GreenAlienHead
             ItemDef alienhead = LegacyResourcesAPI.Load<ItemDef>("ItemDefs/" + nameof(RoR2Content.Items.AlienHead));
             if (alienhead)
             {
-                alienhead.tier = headNewTier;
-                alienhead.deprecatedTier = headNewTier;
+                alienhead._itemTierDef = ItemTierCatalog.GetItemTierDef(headNewTier);
                 if (headNewTier == ItemTier.Tier2)
-                    RoR2Content.Items.AlienHead.pickupIconSprite = greenAlienHeadSprite;
+                    alienhead.pickupIconSprite = greenAlienHeadSprite;
             }
 
             LanguageAPI.Add("ITEM_ALIENHEAD_DESC",
