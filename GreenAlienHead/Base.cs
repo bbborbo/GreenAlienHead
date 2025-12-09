@@ -65,7 +65,9 @@ namespace GreenAlienHead
             ItemDef alienhead = LegacyResourcesAPI.Load<ItemDef>("ItemDefs/" + nameof(RoR2Content.Items.AlienHead));
             if (alienhead)
             {
-                alienhead._itemTierDef = ItemTierCatalog.GetItemTierDef(headNewTier);
+                //alienhead._itemTierDef = ItemTierCatalog.GetItemTierDef(headNewTier);
+                alienhead.tier = headNewTier;
+                alienhead.deprecatedTier = headNewTier;
                 if (headNewTier == ItemTier.Tier2)
                     alienhead.pickupIconSprite = greenAlienHeadSprite;
             }
@@ -83,7 +85,7 @@ namespace GreenAlienHead
             int alienHeadLocation = 15;
             c.GotoNext(MoveType.Before,
                 x => x.MatchLdsfld("RoR2.RoR2Content/Items", "AlienHead"),
-                x => x.MatchCallOrCallvirt<Inventory>(nameof(Inventory.GetItemCount)),
+                x => x.MatchCallOrCallvirt<Inventory>(nameof(Inventory.GetItemCountEffective)),
                 x => x.MatchStloc(out alienHeadLocation)
                 );
 
